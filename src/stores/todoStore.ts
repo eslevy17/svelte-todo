@@ -1,25 +1,27 @@
 import { writable } from "svelte/store";
+import type { todo } from "../types/todo";
 
-let todoID = 1;
-
-type todo = {
-    id: number
-    text: string
-    done: boolean
-}
+// used by all variants; must be stored somewhere
+export let id = writable(1)
 
 function createTodoList() {
     const {
         subscribe,
-        // set,
+        set,
         update
     } = writable(<todo[]>[]);
 
     return {
         subscribe,
+        set,
         add: (text: string) => update(list => {
+            let currentID = 1
+            id.update(id => {
+                currentID = id
+                return id + 1
+            })
             const newItem: todo = {
-                id: todoID++,
+                id: currentID,
                 text,
                 done: false
             }
@@ -44,4 +46,4 @@ function createTodoList() {
     }
 }
 
-export const todos = createTodoList();
+export const storeTodos = createTodoList();

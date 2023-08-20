@@ -1,20 +1,81 @@
 <script lang="ts">
     import Todo from "../components/Todo.svelte";
     import Input from "../components/Input.svelte";
-    import { todos } from '../stores/todoStore';
+    import { id, storeTodos } from '../stores/todoStore';
+    import { setContext } from "svelte";
+    import type { stateOptionType, todo } from "../types/todo";
+
+    const stateOptions: stateOptionType[] = [
+        'Props',
+        'Dispatch',
+        'Store',
+        'Context',
+    ]
+
+    let stateOption = stateOptions[0]
+
+    let todos: todo[]
+
+    // Store method requires syncing (no others do):
+    $: todos = $storeTodos as todo[]
+    $: storeTodos.set(todos)
+
+    // UNIVERSAL
+    let currentID = 1;
+    function updateTodos(text: string) {
+        id.update(id => {
+            currentID = id
+            return id + 1
+        })
+        todos = [
+            ...todos,
+            {
+                id: currentID,
+                text,
+                done: false
+            }
+        ]
+    }
+
+    // PROPS
+    function onAdd(text: string) {
+        updateTodos(text)
+    }
+
+    // DISPATCH
+    function handleAdd(e) {
+        updateTodos(e.detail.text)
+    }
+
+    // CONTEXT
+    setContext('todos', {
+        addItem: text => updateTodos(text)
+    })
 </script>
 
-<h1>To Do List</h1>
-
 <div class="content">
-    <Input />
+    <div class="heading-row">
+        <h3 class="header">To Do List</h3>
+        <i>Add using...</i>
+        <select bind:value={stateOption} class="select">
+            {#each stateOptions as stateOption}
+                <option value="{stateOption}">{stateOption}</option>
+            {/each}
+        </select>
+    </div>
+
+    <Input
+        {stateOption}
+        {onAdd}
+        on:handleAdd={handleAdd}
+    />
 
     <div class="lists-container">
         {#each [false, true] as done}
             <div>
                 <p class="list-title">{done ? 'Done' : 'To Do'}</p>
 
-                {#each $todos.filter(todo => todo.done === done) as todo}
+                {#each todos.filter(todo => todo.done === done) as todo}
                     <Todo {...todo} />
                 {/each}
             </div>
@@ -28,6 +89,19 @@
         border: 1px solid green;
         margin: auto;
         padding: 1rem;
+    }
+    .header {
+        margin-right: auto;
+    }
+    .heading-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: .5rem;
+    }
+
+    .select {
+        margin-bottom: .5rem;
     }
 
     .list-title {

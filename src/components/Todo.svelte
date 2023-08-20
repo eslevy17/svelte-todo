@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { todos } from '../stores/todoStore';
+    import { storeTodos } from '../stores/todoStore';
 
     export let id;
     export let text;
