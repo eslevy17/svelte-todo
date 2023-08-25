@@ -56,7 +56,7 @@
 <div class="content">
     <div class="heading-row">
         <h3 class="header">To Do List</h3>
-        <i>Add using...</i>
+        <p><i>Add using...</i></p>
         <select bind:value={stateOption} class="select">
             {#each stateOptions as stateOption}
                 <option value="{stateOption}">{stateOption}</option>
@@ -86,7 +86,8 @@
 <style>
     .content {
         width: 32rem;
-        border: 1px solid green;
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
         margin: auto;
         padding: 1rem;
     }

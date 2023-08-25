@@ -36,5 +36,6 @@
     .text-input {
         width: 100%;
         box-sizing: border-box;
+        font-size: 1.2rem;
     }
 </style>

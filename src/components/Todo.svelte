@@ -23,6 +23,7 @@
             storeTodos.updateText({id, text, done})
         }}
         class="text-input"
+        class:done
     />
 
     <span on:click={() => storeTodos.delete(id)} class="x-button">
@@ -44,6 +45,10 @@
     .text-input {
         margin-bottom: .5rem;
         flex-grow: 1;
+    }
+
+    .done {
+        opacity: .5;
     }
 
     .x-button:hover {
