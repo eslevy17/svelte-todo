@@ -7,12 +7,18 @@
 </script>
 
 <div class="todo">
-    <input
-        type="checkbox"
-        bind:checked={done}
-        on:change={() => storeTodos.updateDone({id, text, done})}
-        class="checkbox"
-    />
+    <label class="checkbox-container">
+        <input
+            type="checkbox"
+            bind:checked={done}
+            on:change={() => storeTodos.updateDone({id, text, done})}
+            class="hidden-checkbox"
+        />
+        <span
+            class="checkmark"
+            class:done
+        ></span>
+    </label>
     <input
         bind:value={text}
         on:change={() => {
@@ -32,8 +38,49 @@
 </div>
 
 <style>
-    .checkbox {
+    .checkbox-container {
+        position: relative;
+    }
+
+    .hidden-checkbox {
+        display: none;
+    }
+
+    .checkmark {
         cursor: pointer;
+        display: block;
+        height: 1.3rem;
+        width: 1.3rem;
+        margin: .1rem 0;
+        background-color: var(--grey10);
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius);
+        box-sizing: border-box;
+    }
+
+    .checkmark:hover {
+        background-color: var(--grey9);
+    }
+
+    .checkbox-container input:checked ~ .checkmark {
+        background-color: dodgerblue;
+    }
+
+    .checkmark:after {
+        content: '';
+        display: none;
+        position: absolute;
+        left: .4rem;
+        top: .25rem;
+        width: 6px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .checkbox-container input:checked ~ .checkmark:after {
+        display: block;
     }
 
     .todo {
@@ -45,6 +92,7 @@
     .text-input {
         margin-bottom: .5rem;
         flex-grow: 1;
+        height: 1.5rem;
     }
 
     .done {
