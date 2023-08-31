@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { flip } from 'svelte/animate'
     import Todo from "../components/Todo.svelte";
     import Input from "../components/Input.svelte";
     import { id, storeTodos } from '../stores/todoStore';
@@ -75,8 +76,10 @@
             <div>
                 <p class="list-title">{done ? 'Done' : 'To Do'}</p>
 
-                {#each todos.filter(todo => todo.done === done) as todo}
-                    <Todo {...todo} />
+                {#each todos.filter(todo => todo.done === done) as todo (todo.id)}
+                    <div animate:flip>
+                        <Todo {...todo} />
+                    </div>
                 {/each}
             </div>
         {/each}

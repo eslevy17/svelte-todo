@@ -1,12 +1,16 @@
 <script lang="ts">
     import { storeTodos } from '../stores/todoStore';
+    import { fade } from 'svelte/transition'
 
     export let id;
     export let text;
     export let done;
 </script>
 
-<div class="todo">
+<div
+    class="todo"
+    transition:fade
+>
     <label class="checkbox-container">
         <input
             type="checkbox"
